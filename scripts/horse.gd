@@ -217,3 +217,6 @@ func _check_wall_collision(p_collision: SGKinematicCollision2D):
 func _set_speed_multiplier(mult: int):
 	_fixed_speed_multiplier = mult
 	recalculate_speed()
+
+func get_current_speed() -> float:
+	return _fixed_move_speed
