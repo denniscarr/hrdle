@@ -219,4 +219,6 @@ func _set_speed_multiplier(mult: int):
 	recalculate_speed()
 
 func get_current_speed() -> float:
-	return _fixed_move_speed
+	#return _fixed_move_speed / SGFixed.ONE
+	return SGFixed.to_float(_fixed_move_speed)
+	
