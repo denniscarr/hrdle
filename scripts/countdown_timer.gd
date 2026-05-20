@@ -5,7 +5,6 @@ extends Node2D
 ## Emitted when the countdown has finished
 signal countdown_finished
 
-
 ## How fast the bouncing timer moves
 @export var _speed: float = 100.0
 
@@ -40,7 +39,9 @@ func _ready():
 
 
 func _input(event):
-	if event.is_action_pressed("skip_countdown"):
+	if BetManager.derby_manager.derby_started && \
+	BetManager.current_level.current_state == Level.State.COUNTDOWN && \
+	event.is_action_pressed("skip_countdown"):
 		_finish_countdown()
 
 
