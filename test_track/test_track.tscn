@@ -4,5 +4,3 @@
 
 [node name="TestTrack" type="Node2D" unique_id=716133876]
 script = ExtResource("1_531do")
-_horses = null
-_race_scenes = null

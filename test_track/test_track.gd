@@ -7,3 +7,6 @@ extends Node
 func _ready() -> void:
 	# Pick a race track at random
 	var race := _race_scenes.pick_random().instantiate() as RaceTrack
+	add_child(race)
+	race.initialize(_horses)
+	race.start_countdown()
