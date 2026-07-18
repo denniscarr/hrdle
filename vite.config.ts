@@ -1,7 +1,22 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import path from "node:path";
 
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [react()],
-})
+export default defineConfig(() => {
+  return {
+    resolve: {
+      alias: {
+        app: path.resolve(__dirname, "src"),
+      },
+    },
+    plugins: [react()],
+    base: `$/`, // TODO: I prob need to set this to something actually correct
+    build: {
+      sourcemap: true,
+    },
+    server: {
+      host: true,
+    },
+  };
+});
