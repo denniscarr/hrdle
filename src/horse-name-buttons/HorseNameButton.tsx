@@ -13,7 +13,7 @@ const HorseNameButton = ({ name }: HorseNameButtonProps) => {
       <button onClick={() => setScore((prev: number) => prev + 1)}>
         {name}
       </button>
-      <p>{score}</p>
+      <p>{`$${score}`}</p>
     </div>
   );
 };
