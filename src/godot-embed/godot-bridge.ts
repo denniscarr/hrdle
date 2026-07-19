@@ -12,8 +12,14 @@ export const GODOT_EVENT = {
 };
 export type GodotEvent = (typeof GODOT_EVENT)[keyof typeof GODOT_EVENT];
 
+export interface HorseData {
+  name: string;
+  nameAbbrev: string;
+  color: string;
+}
+
 export interface RaceInitializedEvent {
-  horseNames: string[];
+  horseDatas: HorseData[];
 }
 
 export function sendGodotMessage(

@@ -28,14 +28,25 @@ func _ready() -> void:
     _race_track.initialize(horses)
     _race_track.start_countdown()
 
-    var horse_names: Array[String] = [];
-    horse_names = horses.reduce(
-        func(hn: Array[String], horseData: HorseData): 
-            hn.push_back(horseData.name_abrev)
-            return hn,
-        horse_names
+    # Reduce horse data into an web-compatible dict and send it to React
+    var web_horse_datas: Array[Dictionary] = []
+    web_horse_datas = horses.reduce(
+        func(whd: Array[Dictionary], hd: HorseData):
+            (
+                whd
+                . push_back(
+                    {
+                        "name": hd.name,
+                        "nameAbbrev": hd.name_abrev,
+                        "color": hd.color,
+                    }
+                )
+            )
+            return whd,
+        web_horse_datas
     )
-    JSBridge.send_to_js(JSBridge.MessageType.RACE_INITIALIZED, { "horseNames": horse_names })
+
+    JSBridge.send_to_js(JSBridge.MessageType.RACE_INITIALIZED, {"horseDatas": web_horse_datas})
 
 
 func _input(event: InputEvent) -> void:

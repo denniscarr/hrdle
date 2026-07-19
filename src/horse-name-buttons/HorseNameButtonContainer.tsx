@@ -1,17 +1,24 @@
+import type { HorseData } from "@/godot-embed/godot-bridge";
 import HorseNameButton from "./HorseNameButton";
 import styles from "./HorseNameButtonContainer.module.css";
 
 interface HorseNameButtonContainerProps {
-  horseNames: string[];
+  horseDatas: HorseData[];
 }
 
 const HorseNameButtonContainer = ({
-  horseNames,
+  horseDatas,
 }: HorseNameButtonContainerProps) => {
   return (
     <div className={styles.container}>
-      {horseNames.map((horseName: string) => {
-        return <HorseNameButton name={horseName} />;
+      {horseDatas.map((horseData: HorseData) => {
+        return (
+          <HorseNameButton
+            key={horseData.nameAbbrev}
+            name={horseData.nameAbbrev}
+            color={horseData.color}
+          />
+        );
       })}
     </div>
   );

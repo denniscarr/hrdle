@@ -4,23 +4,23 @@ import styles from "./App.module.css";
 import {
   GODOT_EVENT,
   useGodotListener,
+  type HorseData,
   type RaceInitializedEvent,
 } from "./godot-embed/godot-bridge";
 import HorseNameButtonContainer from "./horse-name-buttons/HorseNameButtonContainer";
 
 function App() {
-  const [horseNames, setHorseNames] = useState<string[]>([]);
-  console.log(horseNames);
+  const [horseDatas, setHorseDatas] = useState<HorseData[]>([]);
 
   useGodotListener(GODOT_EVENT.RACE_INITIALIZED, (e: RaceInitializedEvent) => {
-    setHorseNames(e.horseNames);
+    setHorseDatas(e.horseDatas);
   });
 
   return (
     <div className={styles.fullscreenContainer}>
       <div>
         <Race />
-        <HorseNameButtonContainer horseNames={horseNames} />
+        <HorseNameButtonContainer horseDatas={horseDatas} />
       </div>
     </div>
   );
