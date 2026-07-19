@@ -1,22 +1,26 @@
 import { useState } from "react";
 import Race from "@/race/Race";
 import styles from "./App.module.css";
+import {
+  GODOT_EVENT,
+  useGodotListener,
+  type RaceInitializedEvent,
+} from "./godot-embed/godot-bridge";
+import HorseNameButtonContainer from "./horse-name-buttons/HorseNameButtonContainer";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [horseNames, setHorseNames] = useState<string[]>([]);
+  console.log(horseNames);
+
+  useGodotListener(GODOT_EVENT.RACE_INITIALIZED, (e: RaceInitializedEvent) => {
+    setHorseNames(e.horseNames);
+  });
 
   return (
-    <div
-    className={styles.fullscreenContainer}
-    >
+    <div className={styles.fullscreenContainer}>
       <div>
         <Race />
-      </div>
-      <div>
-        <p>My penis did explode this many times: {count}</p>
-        <button onClick={() => setCount((v) => v + 1)}>
-          Click to explode penis
-        </button>
+        <HorseNameButtonContainer horseNames={horseNames} />
       </div>
     </div>
   );
