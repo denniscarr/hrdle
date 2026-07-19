@@ -1,19 +1,17 @@
 import type { HorseData } from "@/godot-embed/godot-bridge";
-import HorseNameButton from "./HorseNameButton";
-import styles from "./HorseNameButtonContainer.module.css";
+import MashBetBtn from "./MathBetBtn";
+import styles from "./MashBetBtns.module.css";
 
-interface HorseNameButtonContainerProps {
+interface MashBetBtnsProps {
   horseDatas: HorseData[];
 }
 
-const HorseNameButtonContainer = ({
-  horseDatas,
-}: HorseNameButtonContainerProps) => {
+const MashBetBtns = ({ horseDatas }: MashBetBtnsProps) => {
   return (
     <div className={styles.container}>
       {horseDatas.map((horseData: HorseData) => {
         return (
-          <HorseNameButton
+          <MashBetBtn
             key={horseData.nameAbbrev}
             name={horseData.nameAbbrev}
             color={horseData.color}
@@ -24,4 +22,4 @@ const HorseNameButtonContainer = ({
   );
 };
 
-export default HorseNameButtonContainer;
+export default MashBetBtns;

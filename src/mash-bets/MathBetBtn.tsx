@@ -1,13 +1,13 @@
 import { useState } from "react";
-import styles from "./HorseNameButton.module.css";
+import styles from "./MashBetBtn.module.css";
 import { godotColorToCss } from "@/util/godot-utils";
 
-interface HorseNameButtonProps {
+interface MashBetBtnProps {
   name: string;
   color: string;
 }
 
-const HorseNameButton = ({ name, color }: HorseNameButtonProps) => {
+const MashBetBtn = ({ name, color }: MashBetBtnProps) => {
   const [score, setScore] = useState(0);
 
   return (
@@ -25,4 +25,4 @@ const HorseNameButton = ({ name, color }: HorseNameButtonProps) => {
   );
 };
 
-export default HorseNameButton;
+export default MashBetBtn;

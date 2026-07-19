@@ -5,7 +5,7 @@
   padding: 2px;
 }
 
-button {
+.container button {
   padding: 8px;
   min-width: 50px;
   min-height: 40px;
@@ -13,7 +13,7 @@ button {
   border-radius: 4px;
 }
 
-p {
+.container p {
   display: flex;
   justify-content: center;
   margin: 0px;

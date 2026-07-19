@@ -7,7 +7,7 @@ import {
   type HorseData,
   type RaceInitializedEvent,
 } from "./godot-embed/godot-bridge";
-import HorseNameButtonContainer from "./horse-name-buttons/HorseNameButtonContainer";
+import MashBetBtns from "@/mash-bets/MashBetBtns";
 
 function App() {
   const [horseDatas, setHorseDatas] = useState<HorseData[]>([]);
@@ -20,7 +20,7 @@ function App() {
     <div className={styles.fullscreenContainer}>
       <div>
         <Race />
-        <HorseNameButtonContainer horseDatas={horseDatas} />
+        <MashBetBtns horseDatas={horseDatas} />
       </div>
     </div>
   );
