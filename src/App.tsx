@@ -18,7 +18,8 @@ function App() {
 
   return (
     <div className={styles.fullscreenContainer}>
-      <div>
+      <h1>Horse Race Tests</h1>
+      <div className={styles.gameWrapper}>
         <Race />
         <MashBetBtns horseDatas={horseDatas} />
       </div>

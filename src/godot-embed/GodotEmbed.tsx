@@ -1,6 +1,6 @@
 // Adapted from d3dc/react-godot
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export type GodotEngineProps = {
   engine: EngineConstructor;
@@ -15,22 +15,14 @@ interface GodotEmbedProps {
   script: EngineLoaderDescription;
   executable: string;
   gdextensionLibs?: string[];
-  // The ideal aspect ratio of the canvas
-  aspectRatio?: number;
-  resize?: boolean;
+  renderWidth?: number;
+  renderHeight?: number;
+  nearestNeighbor?: boolean;
   params?: unknown;
   hideCanvas?: boolean;
-  preChildren?: React.ReactNode;
-  children?: React.ReactNode;
   onGameLoaded?: () => void;
   onGameUnloaded?: () => void;
   onLoadError?: (reason: string) => void;
-  onDimensionsChanged?: (
-    canvasW: number,
-    canvasH: number,
-    wrapperW: number,
-    wrapperH: number,
-  ) => void;
 }
 
 // Serializes engine lifecycles across remounts: two overlapping Godot runtimes
@@ -41,20 +33,17 @@ let enginePipeline: Promise<void> = Promise.resolve();
 function GodotEmbed({
   script,
   executable,
-  aspectRatio,
   gdextensionLibs,
-  resize = false,
-  //   hideCanvas,
-  preChildren,
-  children,
+  renderWidth,
+  renderHeight,
+  nearestNeighbor = false,
+  hideCanvas,
   onGameLoaded,
   onGameUnloaded,
   onLoadError,
-  onDimensionsChanged,
 }: GodotEmbedProps) {
   const outerRef = useRef<HTMLDivElement>(null);
   const [engine, setEngine] = useState<EngineConstructor | null>(null);
-  const [dimensions, setDimensions] = useState([0, 0]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const godotRef = useRef<GodotEngineInstance | null>(null);
 
@@ -186,116 +175,20 @@ function GodotEmbed({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [engine, executable]);
 
-  // Handle resizing
-  useLayoutEffect(() => {
-    if (!resize || outerRef.current === null) {
-      return;
-    }
-
-    function handleResize(overrideW = 0, overrideH = 0) {
-      if (!outerRef.current) {
-        return;
-      }
-
-      /*
-       * TODO: A lot of this sizing code was written specifically for Pixellence
-       * (a former project I worked on).
-       * Determine if any of it is necessary/useful here and delete unneeded
-       * parts.
-       */
-
-      const containerW = overrideW || outerRef.current.clientWidth;
-      const containerH = overrideH || outerRef.current.clientHeight;
-      const targetRatio = aspectRatio || 1;
-      // const isScreenPhonePortrait =
-      //   window.innerHeight > window.innerWidth && window.innerWidth < 768;
-
-      // let finalCssW: number;
-      // let finalCssH: number;
-
-      // On phones specifically, we want to ignore the apsect ratio provided
-      // by Godot if it's taller than the containing div, and just use the
-      // aspect of the containing div instead.
-      // if (isScreenPhonePortrait) {
-      //   const idealH = containerW / targetRatio;
-      //   if (idealH > containerH) {
-      //     finalCssW = containerW;
-      //     finalCssH = containerH;
-      //   } else {
-      //     finalCssW = containerW;
-      //     finalCssH = idealH;
-      //   }
-      // } else {
-      // In landscape, we always want to respect the grid's aspect ratio.
-      let proposedW = containerW;
-      let proposedH = containerW / targetRatio;
-
-      // If the proposed height is greater than the containing div's shrink the
-      // canvas just enough to fit.
-      if (proposedH > containerH) {
-        proposedH = containerH;
-        proposedW = containerH * targetRatio;
-      }
-
-      const finalCssW = proposedW;
-      const finalCssH = proposedH;
-      // }
-
-      const dpr = getDpr();
-      const newCanvasW = Math.max(1, Math.floor(finalCssW * dpr));
-      const newCanvasH = Math.max(1, Math.floor(finalCssH * dpr));
-
-      // Don't continue if the canvas does not need to change size
-      if (
-        newCanvasW === canvasRef.current?.width &&
-        newCanvasH === canvasRef.current?.height
-      ) {
-        return;
-      }
-
-      // Account for the device pixel ratio
-      setDimensions([newCanvasW, newCanvasH]);
-
-      onDimensionsChanged?.(newCanvasW, newCanvasH, containerW, containerH);
-    }
-
-    // Possible fix for Safari page sizing issue. Needs testing.
-    const delayedResize = () => {
-      handleResize();
-      setTimeout(handleResize, 100);
-    };
-
-    window.addEventListener("focus", delayedResize);
-    window.addEventListener("pageshow", delayedResize);
-    window.visualViewport?.addEventListener("resize", delayedResize);
-
-    const resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const { width, height } = entry.contentRect;
-        handleResize(width, height);
-      }
-    });
-
-    resizeObserver.observe(outerRef.current);
-
-    return () => {
-      window.removeEventListener("focus", delayedResize);
-      window.removeEventListener("pageshow", delayedResize);
-      window.visualViewport?.removeEventListener("resize", delayedResize);
-      resizeObserver.disconnect();
-    };
-  }, [aspectRatio, resize, onDimensionsChanged]);
-
   return (
-    <div id="wrap" ref={outerRef} tabIndex={0}>
-      {preChildren}
+    <div
+      id="wrap"
+      ref={outerRef}
+      tabIndex={0}
+      style={{ width: "100%", height: "100%", display: "flex" }}
+    >
       {engine !== null && (
         <canvas
           ref={canvasRef}
           key={executable}
           id="canvas"
-          width={dimensions[0]}
-          height={dimensions[1]}
+          width={renderWidth}
+          height={renderHeight}
           tabIndex={-1}
           //   className={cn(
           //     hideCanvas ? "hidden" : "block",
@@ -304,9 +197,12 @@ function GodotEmbed({
           //     "max-w-full max-h-full",
           //   )}
           style={{
-            width: `${dimensions[0] / getDpr()}px`,
-            height: `${dimensions[1] / getDpr()}px`,
+            width: "100%",
+            height: "100%",
             objectFit: "contain",
+            display: hideCanvas ? "none" : "block",
+            imageRendering: nearestNeighbor ? "pixelated" : "auto",
+            pointerEvents: "none",
           }}
           onMouseDown={(e) => {
             e.preventDefault();
@@ -318,14 +214,13 @@ function GodotEmbed({
           Please try updating or use a different browser.
         </canvas>
       )}
-      {children}
     </div>
   );
 }
 
 export default GodotEmbed;
 
-function getDpr(): number {
-  const dpr = window.devicePixelRatio || 1;
-  return Math.min(dpr, 2.0);
-}
+// function getDpr(): number {
+//   const dpr = window.devicePixelRatio || 1;
+//   return Math.min(dpr, 2.0);
+// }

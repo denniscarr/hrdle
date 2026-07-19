@@ -27,7 +27,7 @@ function Race() {
   }, [isLoaded, loadError]);
 
   const handleGameLoaded = useCallback(() => {
-    // setHideGame(true);
+    setHideGame(false);
 
     // TODO: restore prev board state?
     // basically just horse pos & dirs
@@ -37,7 +37,7 @@ function Race() {
 
   function handleGameUnloaded() {
     setIsLoaded(false);
-    setHideGame(true);
+    // setHideGame(true);
   }
 
   const handleLoadError = useCallback(() => {
@@ -87,17 +87,11 @@ function Race() {
 
   return (
     <div // Full screen container
-      // className={cn("w-full h-dvh flex flex-col overflow-hidden")}
-      className={styles.mainContainer
-      }
+      className={styles.fullScreenContainer}
     >
-      <div // Gameplay components (changes layout with screen aspect)
-        id=""
-        // className={
-        //   cn(
-        //   "w-full h-full min-w-0 min-h-0 flex overflow-hidden",
-        //   isLandscape ? "flex-row" : "flex-col",
-        // )}
+      <div // Embed container
+        id="embedContainer"
+        className={styles.embedContainer}
       >
         <GodotEmbed
           // TODO: use daily race seed as key?
@@ -108,18 +102,21 @@ function Race() {
             `libsgphysics2d.web.template_debug.wasm32.nothreads.wasm`,
             // `${import.meta.env.BASE_URL}/libsgphysics2d.web.template_release.wasm32.wasm`,
           ]}
-          resize={true}
           onGameLoaded={handleGameLoaded}
           onGameUnloaded={handleGameUnloaded}
           onLoadError={handleLoadError}
+          renderWidth={640}
+          renderHeight={480}
           hideCanvas={hideGame}
-          // aspectRatio={boardAspect}
+          nearestNeighbor={true}
           // onDimensionsChanged={handleCanvasDimensionsChanged}
         />
+        {!isLoaded && (
+          <div className={styles.loadingContainer}>
+            <LoadingScreen />
+          </div>
+        )}
       </div>
-      {!isLoaded && (
-        <LoadingScreen />
-      )}
     </div>
   );
 }

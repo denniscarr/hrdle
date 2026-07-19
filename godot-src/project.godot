@@ -21,8 +21,9 @@ JSBridge="*uid://b4i3tvi5quisx"
 
 [display]
 
-window/size/viewport_width=800
-window/size/viewport_height=600
+window/size/viewport_width=640
+window/size/viewport_height=480
+window/stretch/mode="canvas_items"
 
 [editor_plugins]
 
