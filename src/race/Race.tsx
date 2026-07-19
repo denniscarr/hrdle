@@ -2,6 +2,8 @@ import GodotEmbed from "@/godot-embed/GodotEmbed";
 // import Loader from "app/ui/Loader";
 // import useDebugKeypress from "app/util/useDebugKeys";
 import { useCallback, useState, useEffect } from "react";
+import styles from "./Race.module.css";
+import LoadingScreen from "@/loading-screen/LoadingScreen";
 
 // interface RaceProps {
 // }
@@ -85,14 +87,17 @@ function Race() {
 
   return (
     <div // Full screen container
-    // className={cn("w-full h-dvh flex flex-col overflow-hidden")}
+      // className={cn("w-full h-dvh flex flex-col overflow-hidden")}
+      className={styles.mainContainer
+      }
     >
       <div // Gameplay components (changes layout with screen aspect)
-      // className={
-      //   cn(
-      //   "w-full h-full min-w-0 min-h-0 flex overflow-hidden",
-      //   isLandscape ? "flex-row" : "flex-col",
-      // )}
+        id=""
+        // className={
+        //   cn(
+        //   "w-full h-full min-w-0 min-h-0 flex overflow-hidden",
+        //   isLandscape ? "flex-row" : "flex-col",
+        // )}
       >
         <GodotEmbed
           // TODO: use daily race seed as key?
@@ -112,16 +117,9 @@ function Race() {
           // onDimensionsChanged={handleCanvasDimensionsChanged}
         />
       </div>
-      {/*  TODO: Loading screen */}
-      {/* {!isLoaded && (
-        <div>
-          {loadError ? (
-            <div className="text-2xl text-black select-none">:-(</div>
-          ) : (
-            <Loader className="grow max-w-50 max-h-50" />
-          )}
-        </div>
-      )} */}
+      {!isLoaded && (
+        <LoadingScreen />
+      )}
     </div>
   );
 }

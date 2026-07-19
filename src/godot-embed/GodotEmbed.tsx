@@ -183,6 +183,7 @@ function GodotEmbed({
         })
         .catch(() => {});
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [engine, executable]);
 
   // Handle resizing

@@ -1,12 +1,14 @@
 import { useState } from "react";
 import Race from "@/race/Race";
-import "./App.css";
+import styles from "./App.module.css";
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
-    <>
+    <div
+    className={styles.fullscreenContainer}
+    >
       <div>
         <Race />
       </div>
@@ -16,7 +18,7 @@ function App() {
           Click to explode penis
         </button>
       </div>
-    </>
+    </div>
   );
 }
 
