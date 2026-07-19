@@ -11,7 +11,7 @@ export default defineConfig(() => {
       },
     },
     plugins: [react()],
-    base: `/`, // TODO: I prob need to set this to something actually correct
+    base: `/hrdle/`,
     build: {
       sourcemap: true,
     },
