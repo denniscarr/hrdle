@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ceqpko0mmfffy"
-path="res://.godot/imported/icon_s_g_capsule_shape_2_d.svg-9fddacb811df6c5e05b8bdd49aa97ad0.ctex"
+uid="uid://c5yuqpyimk5tk"
+path="res://.godot/imported/icon_s_g_area_2_d.svg-1fbe1d5e7ccc7b7b821eb13a219a94a2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/sg-physics-2d/icons/icon_s_g_capsule_shape_2_d.svg"
-dest_files=["res://.godot/imported/icon_s_g_capsule_shape_2_d.svg-9fddacb811df6c5e05b8bdd49aa97ad0.ctex"]
+source_file="res://sg-physics-2d/icons/icon_s_g_area_2_d.svg"
+dest_files=["res://.godot/imported/icon_s_g_area_2_d.svg-1fbe1d5e7ccc7b7b821eb13a219a94a2.ctex"]
 
 [params]
 
