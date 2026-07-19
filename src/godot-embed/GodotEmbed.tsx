@@ -14,6 +14,7 @@ export type GodotEngineProps = {
 interface GodotEmbedProps {
   script: EngineLoaderDescription;
   executable: string;
+  gdextensionLibs?: string[];
   // The ideal aspect ratio of the canvas
   aspectRatio?: number;
   resize?: boolean;
@@ -21,7 +22,6 @@ interface GodotEmbedProps {
   hideCanvas?: boolean;
   preChildren?: React.ReactNode;
   children?: React.ReactNode;
-  wrapperClassName?: string;
   onGameLoaded?: () => void;
   onGameUnloaded?: () => void;
   onLoadError?: (reason: string) => void;
@@ -42,11 +42,11 @@ function GodotEmbed({
   script,
   executable,
   aspectRatio,
+  gdextensionLibs,
   resize = false,
   //   hideCanvas,
   preChildren,
   children,
-  //   wrapperClassName,
   onGameLoaded,
   onGameUnloaded,
   onLoadError,
@@ -72,7 +72,7 @@ function GodotEmbed({
       return;
     }
 
-    const scriptUrl = `${import.meta.env.BASE_URL}/${script}`;
+    const scriptUrl = `${import.meta.env.BASE_URL}${script}`;
     let scriptElement = document.querySelector(
       `script[src="${scriptUrl}"]`,
     ) as HTMLScriptElement;
@@ -117,8 +117,9 @@ function GodotEmbed({
 
       instance = new engine({
         canvas: canvasEl,
-        executable: `${import.meta.env.BASE_URL}/${executable}`,
-        mainPack: `${import.meta.env.BASE_URL}/${executable}.pck`,
+        executable: `${import.meta.env.BASE_URL}${executable}`,
+        mainPack: `${import.meta.env.BASE_URL}${executable}.pck`,
+        gdextensionLibs: gdextensionLibs,
         canvasResizePolicy: 0,
       });
 
@@ -285,18 +286,7 @@ function GodotEmbed({
   }, [aspectRatio, resize, onDimensionsChanged]);
 
   return (
-    <div
-      id="wrap"
-      // TODO: use tailwind?
-      //   className={cn(
-      //     "w-full h-full min-w-0 min-h-0",
-      //     "flex justify-center items-center",
-      //     "overflow-hidden",
-      //     wrapperClassName,
-      //   )}
-      ref={outerRef}
-      tabIndex={0}
-    >
+    <div id="wrap" ref={outerRef} tabIndex={0}>
       {preChildren}
       {engine !== null && (
         <canvas

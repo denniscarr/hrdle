@@ -7,11 +7,11 @@ export default defineConfig(() => {
   return {
     resolve: {
       alias: {
-        app: path.resolve(__dirname, "src"),
+        "@": path.resolve(__dirname, "src"),
       },
     },
     plugins: [react()],
-    base: `$/`, // TODO: I prob need to set this to something actually correct
+    base: `/`, // TODO: I prob need to set this to something actually correct
     build: {
       sourcemap: true,
     },

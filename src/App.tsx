@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Race from "@/race/Race";
 import "./App.css";
 
 function App() {
@@ -6,10 +7,15 @@ function App() {
 
   return (
     <>
-      <p>My penis did explode this many times: {count}</p>
-      <button onClick={() => setCount((v) => v + 1)}>
-        Click to explode penis
-      </button>
+      <div>
+        <Race />
+      </div>
+      <div>
+        <p>My penis did explode this many times: {count}</p>
+        <button onClick={() => setCount((v) => v + 1)}>
+          Click to explode penis
+        </button>
+      </div>
     </>
   );
 }

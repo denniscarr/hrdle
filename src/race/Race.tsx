@@ -1,0 +1,129 @@
+import GodotEmbed from "@/godot-embed/GodotEmbed";
+// import Loader from "app/ui/Loader";
+// import useDebugKeypress from "app/util/useDebugKeys";
+import { useCallback, useState, useEffect } from "react";
+
+// interface RaceProps {
+// }
+
+function Race() {
+  const [hideGame, setHideGame] = useState(true);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [loadError, setLoadError] = useState(false);
+  // TODO: bring useWindowSize over, might be useful
+  // const { aspect: screenAspect } = useWindowSize();
+  // const isLandscape = screenAspect === Aspect.LANDSCAPE;
+
+  // Watchdog: if the Godot embed never finishes loading, surface an error
+  // instead of spinning forever.
+  useEffect(() => {
+    if (isLoaded || loadError) {
+      return;
+    }
+    const timer = setTimeout(() => setLoadError(true), 60000);
+    return () => clearTimeout(timer);
+  }, [isLoaded, loadError]);
+
+  const handleGameLoaded = useCallback(() => {
+    // setHideGame(true);
+
+    // TODO: restore prev board state?
+    // basically just horse pos & dirs
+
+    setIsLoaded(true);
+  }, []);
+
+  function handleGameUnloaded() {
+    setIsLoaded(false);
+    setHideGame(true);
+  }
+
+  const handleLoadError = useCallback(() => {
+    setLoadError(true);
+  }, []);
+
+  // TODO: This should prob become RaceInitialized or some such
+  // function handleGodotBoardInitialized(eventData: BoardInitializedEvent) {
+  //   setHideGame(false);
+  // }
+  // useGodotListener(GODOT_EVENT.BOARD_INITIALIZED, handleGodotBoardInitialized);
+
+  // TODO: should prob add an analogous event
+  // useGodotListener(GODOT_EVENT.GAMEPLAY_START, () => setIsGameplayActive(true));
+
+  // TODO: should prob add an analogous event
+  // useGodotListener(GODOT_EVENT.SOLVED, () => {
+  //   setIsGameplayActive(false);
+  // });
+
+  // TODO: maybe we don't need this stuff but keeping it here as a reminder
+  // const isScreenPhonePortrait =
+  //   window.innerHeight > window.innerWidth && window.innerWidth < 768;
+
+  // function handleCanvasDimensionsChanged(
+  //   canvasW: number,
+  //   canvasH: number,
+  //   divW: number,
+  //   divH: number,
+  // ) {
+  //   const newW = Math.min(canvasW, divW);
+  //   const newH = Math.min(canvasH, divH);
+
+  //   sendGodotMessage(
+  //     GODOT_MESSAGE.SET_DIMENSIONS,
+  //     newW.toString(),
+  //     newH.toString(),
+  //     window.innerHeight > window.innerWidth ? "true" : "false", // Whether page is portrait
+  //   );
+  // }
+
+  // TODO: this would be useful
+  // Allow skipping of game by holding three keys at once
+  // useDebugKeypress(["w", "i", "n"], 1000, () => {
+  //   sendGodotMessage(GODOT_MESSAGE.DEBUG_TRIGGER_VICTORY);
+  // });
+
+  return (
+    <div // Full screen container
+    // className={cn("w-full h-dvh flex flex-col overflow-hidden")}
+    >
+      <div // Gameplay components (changes layout with screen aspect)
+      // className={
+      //   cn(
+      //   "w-full h-full min-w-0 min-h-0 flex overflow-hidden",
+      //   isLandscape ? "flex-row" : "flex-col",
+      // )}
+      >
+        <GodotEmbed
+          // TODO: use daily race seed as key?
+          // key={levelLayout}
+          script={"hrdle.js"}
+          executable="hrdle"
+          gdextensionLibs={[
+            `libsgphysics2d.web.template_debug.wasm32.nothreads.wasm`,
+            // `${import.meta.env.BASE_URL}/libsgphysics2d.web.template_release.wasm32.wasm`,
+          ]}
+          resize={true}
+          onGameLoaded={handleGameLoaded}
+          onGameUnloaded={handleGameUnloaded}
+          onLoadError={handleLoadError}
+          hideCanvas={hideGame}
+          // aspectRatio={boardAspect}
+          // onDimensionsChanged={handleCanvasDimensionsChanged}
+        />
+      </div>
+      {/*  TODO: Loading screen */}
+      {/* {!isLoaded && (
+        <div>
+          {loadError ? (
+            <div className="text-2xl text-black select-none">:-(</div>
+          ) : (
+            <Loader className="grow max-w-50 max-h-50" />
+          )}
+        </div>
+      )} */}
+    </div>
+  );
+}
+
+export default Race;
