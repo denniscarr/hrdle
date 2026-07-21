@@ -42,6 +42,7 @@ func _init_race(rand_seed: int) -> void:
 	_race_track = _race_scenes.pick_random().instantiate() as RaceTrack
 	add_child(_race_track)
 
+	_race_track.determ_rng.seed = rand_seed
 	_race_track.set_race_cam(_cam)
 	_race_track.initialize(horses)
 	_race_track.start_countdown()
