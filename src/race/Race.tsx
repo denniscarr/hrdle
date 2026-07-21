@@ -1,7 +1,7 @@
 import GodotEmbed from "@/godot-embed/GodotEmbed";
 // import Loader from "app/ui/Loader";
 // import useDebugKeypress from "app/util/useDebugKeys";
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styles from "./Race.module.css";
 import LoadingScreen from "@/loading-screen/LoadingScreen";
 
@@ -9,7 +9,6 @@ import LoadingScreen from "@/loading-screen/LoadingScreen";
 // }
 
 function Race() {
-  const [hideGame, setHideGame] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
   const [loadError, setLoadError] = useState(false);
   // TODO: bring useWindowSize over, might be useful
@@ -27,8 +26,6 @@ function Race() {
   }, [isLoaded, loadError]);
 
   const handleGameLoaded = useCallback(() => {
-    setHideGame(false);
-
     // TODO: restore prev board state?
     // basically just horse pos & dirs
 
@@ -105,17 +102,12 @@ function Race() {
           onGameLoaded={handleGameLoaded}
           onGameUnloaded={handleGameUnloaded}
           onLoadError={handleLoadError}
+          loadingScreen={<LoadingScreen />}
           renderWidth={640}
           renderHeight={480}
-          hideCanvas={hideGame}
           nearestNeighbor={true}
           // onDimensionsChanged={handleCanvasDimensionsChanged}
         />
-        {!isLoaded && (
-          <div className={styles.loadingContainer}>
-            <LoadingScreen />
-          </div>
-        )}
       </div>
     </div>
   );

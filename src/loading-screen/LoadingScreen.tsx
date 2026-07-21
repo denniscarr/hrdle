@@ -2,7 +2,7 @@ import styles from "./LoadingScreen.module.css";
 
 const LoadingScreen = () => {
   return (
-    <div className={styles.mainContainer}>
+    <div className={styles.loadingScreen}>
       <p>Loading horsies...</p>
     </div>
   );

@@ -1,5 +1,4 @@
 // Adapted from d3dc/react-godot
-
 import { useEffect, useRef, useState } from "react";
 
 export type GodotEngineProps = {
@@ -23,6 +22,7 @@ interface GodotEmbedProps {
   onGameLoaded?: () => void;
   onGameUnloaded?: () => void;
   onLoadError?: (reason: string) => void;
+  loadingScreen?: React.ReactNode;
 }
 
 // Serializes engine lifecycles across remounts: two overlapping Godot runtimes
@@ -41,11 +41,13 @@ function GodotEmbed({
   onGameLoaded,
   onGameUnloaded,
   onLoadError,
+  loadingScreen,
 }: GodotEmbedProps) {
   const outerRef = useRef<HTMLDivElement>(null);
   const [engine, setEngine] = useState<EngineConstructor | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const godotRef = useRef<GodotEngineInstance | null>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // Attach Godot script to window on first mount.
   // Note: Due to time constraints, I decided not to support changing the
@@ -122,6 +124,7 @@ function GodotEmbed({
           }
           outerRef.current?.focus();
           onGameLoaded?.();
+          setIsLoaded(true);
         },
         (err: unknown) => {
           if (cancelled) {
@@ -190,17 +193,11 @@ function GodotEmbed({
           width={renderWidth}
           height={renderHeight}
           tabIndex={-1}
-          //   className={cn(
-          //     hideCanvas ? "hidden" : "block",
-          //     "touch-none pointer-events-auto",
-          //     "shrink",
-          //     "max-w-full max-h-full",
-          //   )}
           style={{
             width: "100%",
             height: "100%",
             objectFit: "contain",
-            display: hideCanvas ? "none" : "block",
+            display: !isLoaded || hideCanvas ? "none" : "block",
             imageRendering: nearestNeighbor ? "pixelated" : "auto",
             pointerEvents: "none",
           }}
@@ -214,6 +211,7 @@ function GodotEmbed({
           Please try updating or use a different browser.
         </canvas>
       )}
+      {!isLoaded && loadingScreen}
     </div>
   );
 }
