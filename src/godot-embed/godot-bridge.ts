@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 // Messages that can be sent to Godot
 export const GODOT_MESSAGE = {
-  //   INIT_BOARD: "godot:init_board",
+  INIT_RACE: "godot:init_race",
 } as const;
 export type GodotMessage = (typeof GODOT_MESSAGE)[keyof typeof GODOT_MESSAGE];
 

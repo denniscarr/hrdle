@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://d0wpwvxs8lc7w"]
+
+[ext_resource type="Script" uid="uid://b2i14l6j46bo2" path="res://race/race.gd" id="1_xt8ap"]
+[ext_resource type="Script" uid="uid://crlsjvuwjepmk" path="res://hrt_race/scripts/horse_data.gd" id="2_yiuc0"]
+[ext_resource type="Resource" uid="uid://d3wgitggk8bb2" path="res://hrt_race/resources/horse_data/bul_horse_data.tres" id="3_klqtr"]
+[ext_resource type="Resource" uid="uid://01um4idifufw" path="res://hrt_race/resources/horse_data/com_horse_data.tres" id="4_g63gw"]
+[ext_resource type="Resource" uid="uid://b378pktq0d0v3" path="res://hrt_race/resources/horse_data/dtsb_horse_data.tres" id="5_mudrt"]
+[ext_resource type="Resource" uid="uid://bx8sw30b3g7g" path="res://hrt_race/resources/horse_data/knb_horse_data.tres" id="6_yqwes"]
+[ext_resource type="Resource" uid="uid://cfa874h7gjyvt" path="res://hrt_race/resources/horse_data/mry_horse_data.tres" id="7_6ff1w"]
+[ext_resource type="Resource" uid="uid://c217cmu116xqc" path="res://hrt_race/resources/horse_data/oob_horse_data.tres" id="8_xd1nj"]
+[ext_resource type="Resource" uid="uid://tbks7wbpqf64" path="res://hrt_race/resources/horse_data/res_horse_data.tres" id="9_qshci"]
+[ext_resource type="Resource" uid="uid://d1xewcqjoo8p5" path="res://hrt_race/resources/horse_data/white_horse_data.tres" id="10_k6gsy"]
+[ext_resource type="Resource" uid="uid://blrraa3dv71ry" path="res://hrt_race/resources/horse_data/yel_horse_data.tres" id="11_kd6qn"]
+[ext_resource type="PackedScene" uid="uid://bna5ntie8vds7" path="res://hrt_race/scenes/race_tracks/race_track_01.tscn" id="12_k006i"]
+[ext_resource type="PackedScene" uid="uid://br6el3g8twnpb" path="res://hrt_race/scenes/race_tracks/race_track_02.tscn" id="13_nyacn"]
+[ext_resource type="PackedScene" uid="uid://df3vlq7r5hsm2" path="res://hrt_race/scenes/race_tracks/race_track_03.tscn" id="14_lmy2m"]
+[ext_resource type="PackedScene" uid="uid://cn3ix5dyuhbn3" path="res://hrt_race/scenes/race_tracks/race_track_04.tscn" id="15_g1inp"]
+[ext_resource type="PackedScene" uid="uid://djymnstqi1oti" path="res://hrt_race/scenes/race_tracks/race_track_05.tscn" id="16_78n4l"]
+[ext_resource type="PackedScene" uid="uid://ds80awb5k1ap3" path="res://hrt_race/scenes/race_tracks/race_track_06.tscn" id="17_kpshk"]
+
+[node name="Race" type="Node2D" unique_id=1764155793]
+script = ExtResource("1_xt8ap")
+_horses = Array[ExtResource("2_yiuc0")]([ExtResource("3_klqtr"), ExtResource("4_g63gw"), ExtResource("5_mudrt"), ExtResource("6_yqwes"), ExtResource("7_6ff1w"), ExtResource("8_xd1nj"), ExtResource("9_qshci"), ExtResource("10_k6gsy"), ExtResource("11_kd6qn")])
+_race_scenes = Array[PackedScene]([ExtResource("12_k006i"), ExtResource("13_nyacn"), ExtResource("14_lmy2m"), ExtResource("15_g1inp"), ExtResource("16_78n4l"), ExtResource("17_kpshk")])
+
+[node name="RaceCamera" type="Camera2D" parent="." unique_id=1840189080]

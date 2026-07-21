@@ -8,9 +8,11 @@ import {
   type RaceInitializedEvent,
 } from "./godot-embed/godot-bridge";
 import MashBetBtns from "@/mash-bets/MashBetBtns";
+import useSeed from "./util/useSeed";
 
 function App() {
   const [horseDatas, setHorseDatas] = useState<HorseData[]>([]);
+  const dailySeed = useSeed();
 
   useGodotListener(GODOT_EVENT.RACE_INITIALIZED, (e: RaceInitializedEvent) => {
     setHorseDatas(e.horseDatas);
@@ -20,7 +22,7 @@ function App() {
     <div className={styles.mainContainer}>
       <h1>Horse Race Tests</h1>
       <div className={styles.gameWrapper}>
-        <Race />
+        <Race dailySeed={dailySeed} />
         <MashBetBtns horseDatas={horseDatas} />
       </div>
     </div>

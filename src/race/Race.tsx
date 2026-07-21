@@ -4,19 +4,20 @@ import GodotEmbed from "@/godot-embed/GodotEmbed";
 import { useCallback, useEffect, useState } from "react";
 import styles from "./Race.module.css";
 import LoadingScreen from "@/loading-screen/LoadingScreen";
+import { GODOT_MESSAGE, sendGodotMessage } from "@/godot-embed/godot-bridge";
 
-// interface RaceProps {
-// }
+interface RaceProps {
+  dailySeed: string;
+}
 
-function Race() {
+function Race({ dailySeed }: RaceProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [loadError, setLoadError] = useState(false);
   // TODO: bring useWindowSize over, might be useful
   // const { aspect: screenAspect } = useWindowSize();
   // const isLandscape = screenAspect === Aspect.LANDSCAPE;
 
-  // Watchdog: if the Godot embed never finishes loading, surface an error
-  // instead of spinning forever.
+  // Watchdog: if the Godot embed never finishes loading, surface an error.
   useEffect(() => {
     if (isLoaded || loadError) {
       return;
@@ -26,11 +27,11 @@ function Race() {
   }, [isLoaded, loadError]);
 
   const handleGameLoaded = useCallback(() => {
-    // TODO: restore prev board state?
-    // basically just horse pos & dirs
-
+    if (isLoaded) return;
+    sendGodotMessage(GODOT_MESSAGE.INIT_RACE, dailySeed);
+    console.log(dailySeed);
     setIsLoaded(true);
-  }, []);
+  }, [isLoaded, dailySeed]);
 
   function handleGameUnloaded() {
     setIsLoaded(false);
@@ -41,16 +42,10 @@ function Race() {
     setLoadError(true);
   }, []);
 
-  // TODO: This should prob become RaceInitialized or some such
-  // function handleGodotBoardInitialized(eventData: BoardInitializedEvent) {
-  //   setHideGame(false);
-  // }
-  // useGodotListener(GODOT_EVENT.BOARD_INITIALIZED, handleGodotBoardInitialized);
-
   // TODO: should prob add an analogous event
   // useGodotListener(GODOT_EVENT.GAMEPLAY_START, () => setIsGameplayActive(true));
 
-  // TODO: should prob add an analogous event
+  // TODO: should prob add an analogous victory event
   // useGodotListener(GODOT_EVENT.SOLVED, () => {
   //   setIsGameplayActive(false);
   // });
