@@ -91,7 +91,7 @@ func _define_countdown_state(index: int):
 		_audio_player.stop()
 		if _countdown_sounds.size() >= index + 1:
 			_audio_player.stream = _countdown_sounds[index]
-			_audio_player.play()
+			# _audio_player.play()
 
 		if _countdown_textures.size() >= index + 1:
 			_sprite.texture = _countdown_textures[index]

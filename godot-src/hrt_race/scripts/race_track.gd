@@ -194,7 +194,7 @@ func start_race():
 	_current_state = State.RACE
 
 	_countdown_timer.finish_countdown()
-	$AudioStreamPlayer2D.play()
+	# $AudioStreamPlayer2D.play()
 	$RaceClock.show()
 	$RaceClock.start_counting = true
 	$LevelText.show()
@@ -287,7 +287,7 @@ func _on_goal_grabbed_by_horse(horse: Horse):
 	_winning_horse = horse
 	$RaceClock.start_counting = false
 	$AudioStreamPlayer2D.stream = horse.horse_data.victory_theme
-	$AudioStreamPlayer2D.play()
+	# $AudioStreamPlayer2D.play()
 	horse.win()
 	goal_grabbed.emit(horse)
 	_start_victory()
