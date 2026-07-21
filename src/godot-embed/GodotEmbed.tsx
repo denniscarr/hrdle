@@ -180,7 +180,7 @@ function GodotEmbed({
       id="wrap"
       ref={outerRef}
       tabIndex={0}
-      style={{ width: "100%", height: "100%", display: "flex" }}
+      style={{ width: "100%", display: "flex" }}
     >
       {engine !== null && (
         <canvas

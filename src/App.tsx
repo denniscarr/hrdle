@@ -17,7 +17,7 @@ function App() {
   });
 
   return (
-    <div className={styles.fullscreenContainer}>
+    <div className={styles.mainContainer}>
       <h1>Horse Race Tests</h1>
       <div className={styles.gameWrapper}>
         <Race />
