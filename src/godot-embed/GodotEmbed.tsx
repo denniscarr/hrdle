@@ -21,6 +21,7 @@ interface GodotEmbedProps {
   hideCanvas?: boolean;
   onGameLoaded?: () => void;
   onGameUnloaded?: () => void;
+  onLoadProgress?: (percent: number) => void;
   onLoadError?: (reason: string) => void;
   loadingScreen?: React.ReactNode;
 }
@@ -40,6 +41,7 @@ function GodotEmbed({
   hideCanvas,
   onGameLoaded,
   onGameUnloaded,
+  onLoadProgress,
   onLoadError,
   loadingScreen,
 }: GodotEmbedProps) {
@@ -112,6 +114,12 @@ function GodotEmbed({
         mainPack: `${import.meta.env.BASE_URL}${executable}.pck`,
         gdextensionLibs: gdextensionLibs,
         canvasResizePolicy: 0,
+        onProgress: (current, total) => {
+          if (total > 0) {
+            const percent = current / total;
+            onLoadProgress?.(percent);
+          }
+        },
       });
 
       canvasEl = canvasRef.current;

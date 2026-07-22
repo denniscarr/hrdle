@@ -18,6 +18,7 @@ interface RaceProps {
 }
 
 function Race({ dailySeed }: RaceProps) {
+  const [loadProgress, setLoadProgress] = useState(0);
   const isLoaded = useLoadedStore((state) => state.loaded);
   const setLoaded = useLoadedStore((state) => state.setLoaded);
   const [loadError, setLoadError] = useState(false);
@@ -110,8 +111,9 @@ function Race({ dailySeed }: RaceProps) {
           ]}
           onGameLoaded={handleGameLoaded}
           onGameUnloaded={handleGameUnloaded}
+          onLoadProgress={(progress) => setLoadProgress(progress)}
           onLoadError={handleLoadError}
-          loadingScreen={<LoadingScreen />}
+          loadingScreen={<LoadingScreen loadProgress={loadProgress} />}
           renderWidth={640}
           renderHeight={480}
           nearestNeighbor={true}
