@@ -6,11 +6,26 @@
 }
 
 .container button {
-  padding: 8px;
-  min-width: 50px;
+  padding: 6px 2px;
+  min-width: 50x;
   min-height: 40px;
   border: 1px solid black;
   border-radius: 4px;
+  transform: translate(-2px, -2px);
+  box-shadow: 2px 2px 0px black;
+}
+
+.container button:hover {
+  border-color: lightgray;
+}
+
+.container button:active {
+  transform: translate(0px, 0px);
+  box-shadow: 0px 0px 0px black;
+}
+
+.container div {
+  padding: 4px;
 }
 
 .container p {

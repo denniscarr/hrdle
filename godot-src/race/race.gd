@@ -42,6 +42,9 @@ func _init_race(rand_seed: int) -> void:
 	_race_track = _race_scenes.pick_random().instantiate() as RaceTrack
 	add_child(_race_track)
 
+	_race_track.race_started.connect(_on_race_track_race_started)
+	_race_track.race_over.connect(_on_race_track_race_over)
+
 	_race_track.determ_rng.seed = rand_seed
 	_race_track.set_race_cam(_cam)
 	_race_track.initialize(horses)
@@ -51,16 +54,7 @@ func _init_race(rand_seed: int) -> void:
 	var web_horse_datas: Array[Dictionary] = []
 	web_horse_datas = horses.reduce(
 		func(whd: Array[Dictionary], hd: HorseData):
-			(
-				whd
-				. push_back(
-					{
-						"name": hd.name,
-						"nameAbbrev": hd.name_abrev,
-						"color": hd.color,
-					}
-				)
-			)
+			whd.push_back(JSBridge.format_horse_data_for_web(hd))
 			return whd,
 		web_horse_datas
 	)
@@ -97,3 +91,11 @@ func _debug_skip_to_victory():
 
 	# In a debug method, I hereby grant access to private members
 	_race_track._start_victory()
+
+
+func _on_race_track_race_started():
+	JSBridge.send_to_js(JSBridge.MessageType.RACE_STARTED)
+
+
+func _on_race_track_race_over():
+	JSBridge.send_to_js(JSBridge.MessageType.RACE_ENDED)

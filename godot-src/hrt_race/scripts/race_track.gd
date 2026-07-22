@@ -5,6 +5,9 @@ extends SGFixedNode2D
 ## Emitted when a horse grabs a goal, ending the race and triggering the victory sequence.
 signal goal_grabbed(horse: Horse)
 
+## Emitted when the countdown finishes and the race begins
+signal race_started
+
 ## Emitted when the race sequence is completely finished and the game is ready to move on
 signal race_over(winning_horse: HorseData)
 
@@ -213,6 +216,8 @@ func start_race():
 
 	for horse: Horse in _horses:
 		horse.start_moving()
+
+	race_started.emit()
 
 
 func set_paused(p_paused: bool):

@@ -1,17 +1,25 @@
 import GodotEmbed from "@/godot-embed/GodotEmbed";
 // import Loader from "app/ui/Loader";
 // import useDebugKeypress from "app/util/useDebugKeys";
+import {
+  GODOT_EVENT,
+  GODOT_MESSAGE,
+  sendGodotMessage,
+  useGodotListener,
+} from "@/godot-embed/godot-bridge";
+import LoadingScreen from "@/loading-screen/LoadingScreen";
+import { useProgressStore } from "@/state/store";
 import { useCallback, useEffect, useState } from "react";
 import styles from "./Race.module.css";
-import LoadingScreen from "@/loading-screen/LoadingScreen";
-import { GODOT_MESSAGE, sendGodotMessage } from "@/godot-embed/godot-bridge";
+import { useLoadedStore } from "@/state/store";
 
 interface RaceProps {
   dailySeed: string;
 }
 
 function Race({ dailySeed }: RaceProps) {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const isLoaded = useLoadedStore((state) => state.loaded);
+  const setLoaded = useLoadedStore((state) => state.setLoaded);
   const [loadError, setLoadError] = useState(false);
   // TODO: bring useWindowSize over, might be useful
   // const { aspect: screenAspect } = useWindowSize();
@@ -30,17 +38,23 @@ function Race({ dailySeed }: RaceProps) {
     if (isLoaded) return;
     sendGodotMessage(GODOT_MESSAGE.INIT_RACE, dailySeed);
     console.log(dailySeed);
-    setIsLoaded(true);
-  }, [isLoaded, dailySeed]);
+    setLoaded();
+  }, [isLoaded, setLoaded, dailySeed]);
 
   function handleGameUnloaded() {
-    setIsLoaded(false);
+    setLoaded();
     // setHideGame(true);
   }
 
   const handleLoadError = useCallback(() => {
     setLoadError(true);
   }, []);
+
+  // Sync race state with React
+  const setRaceStarted = useProgressStore((state) => state.startRace);
+  const setRaceEnded = useProgressStore((state) => state.endRace);
+  useGodotListener(GODOT_EVENT.RACE_STARTED, setRaceStarted);
+  useGodotListener(GODOT_EVENT.RACE_ENDED, setRaceEnded);
 
   // TODO: should prob add an analogous event
   // useGodotListener(GODOT_EVENT.GAMEPLAY_START, () => setIsGameplayActive(true));

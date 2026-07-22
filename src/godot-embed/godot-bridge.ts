@@ -9,6 +9,8 @@ export type GodotMessage = (typeof GODOT_MESSAGE)[keyof typeof GODOT_MESSAGE];
 // Events dispatched from Godot that can be listened to in React
 export const GODOT_EVENT = {
   RACE_INITIALIZED: "godot:race_initialized",
+  RACE_STARTED: "godot:race_started",
+  RACE_ENDED: "godot:race_ended",
 };
 export type GodotEvent = (typeof GODOT_EVENT)[keyof typeof GODOT_EVENT];
 
@@ -20,6 +22,10 @@ export interface HorseData {
 
 export interface RaceInitializedEvent {
   horseDatas: HorseData[];
+}
+
+export interface RaceEndedEvent {
+  winner: HorseData;
 }
 
 export function sendGodotMessage(

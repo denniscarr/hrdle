@@ -6,6 +6,8 @@ signal init_race_recieved(daily_seed: int)
 ## Messages that can be sent to the JS code
 enum MessageType {
 	RACE_INITIALIZED,
+	RACE_STARTED,
+	RACE_ENDED,
 }
 
 ## Callbacks that can be recieved from the JS code
@@ -15,6 +17,8 @@ enum WebCallbackType {
 
 const _MESSAGE_NAMES_BY_TYPE: Dictionary = {
 	MessageType.RACE_INITIALIZED: "godot:race_initialized",
+	MessageType.RACE_STARTED: "godot:race_started",
+	MessageType.RACE_ENDED: "godot:race_ended",
 }
 
 const _WEB_CALLBACKS_BY_NAME: Dictionary = {
@@ -33,6 +37,15 @@ func _ready():
 	var target_window = window.top if window.top else window
 	target_window.godot_handler = _web_callback_ref
 	target_window.console.log("Godot: registered godot_handler on top window")
+
+
+func format_horse_data_for_web(horse_data: HorseData) -> Dictionary:
+	var formatted := {
+		"name": horse_data.name,
+		"nameAbbrev": horse_data.name_abrev,
+		"color": horse_data.color,
+	}
+	return formatted
 
 
 func send_to_js(message_type, event_data: Dictionary = {}):
